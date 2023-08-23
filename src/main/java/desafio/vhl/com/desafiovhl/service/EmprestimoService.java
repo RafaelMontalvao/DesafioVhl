@@ -1,8 +1,10 @@
 package desafio.vhl.com.desafiovhl.service;
+import desafio.vhl.com.desafiovhl.exception.LeitorComMuitosEmprestimosException;
 import desafio.vhl.com.desafiovhl.exception.LivroIndisponivelException;
 import desafio.vhl.com.desafiovhl.exception.RegistroNaoEncontradoException;
 import desafio.vhl.com.desafiovhl.model.Emprestimo;
 import desafio.vhl.com.desafiovhl.model.Livro;
+import desafio.vhl.com.desafiovhl.model.Usuario;
 import desafio.vhl.com.desafiovhl.repository.EmprestimoRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +28,9 @@ public class EmprestimoService {
     @Transactional
     public Emprestimo incluir(Emprestimo emprestimo) {
         Livro livro = livroService.consultar(emprestimo.getIsbn());
+        Usuario usuario = usuarioService.consultar(emprestimo.getCpf());
+        if(usuario.getQtdEmprestimos()>=2)
+            throw new LeitorComMuitosEmprestimosException();
         if (!livro.isDisponivel())
             throw new LivroIndisponivelException();
         emprestimo.setDataHoraEmprestimo(LocalDateTime.now());
