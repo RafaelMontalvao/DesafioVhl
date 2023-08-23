@@ -56,4 +56,10 @@ public class LivroController {
         return ResponseEntity.ok(resp);
     }
 
+    @DeleteMapping("{isbn}")
+    public ResponseEntity excluir(@PathVariable String isbn) {
+        livroService.excluir(isbn);
+        return ResponseEntity.noContent().build();
+    }
+
 }
