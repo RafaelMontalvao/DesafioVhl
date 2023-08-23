@@ -1,6 +1,8 @@
 package desafio.vhl.com.desafiovhl.service;
 
 
+import desafio.vhl.com.desafiovhl.dto.UsuarioResponse;
+import desafio.vhl.com.desafiovhl.exception.RegistroExistenteException;
 import desafio.vhl.com.desafiovhl.model.Usuario;
 import desafio.vhl.com.desafiovhl.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,4 +19,11 @@ public class UsuarioService {
 
     public  List<Usuario> consultar() {
         return usuarioRepo.findAll();
-}}
+    }
+    public Usuario criar(Usuario usuario) {
+        if (usuarioRepo.existsById(usuario.getCpf()))
+            throw new RegistroExistenteException();
+        usuario = usuarioRepo.save(usuario);
+        return usuario;
+    }
+}
