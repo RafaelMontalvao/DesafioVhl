@@ -24,6 +24,10 @@ public class LivroService {
         return livroRepo.findByAutoresContainsIgnoreCase(autor);
     }
 
+    public List<Livro> consultarPortitulo(String titulo) {
+        return livroRepo.findByTituloContainsIgnoreCase(titulo);
+    }
+
     public Livro buscarPorIsbn(String isbn) {
         return livroRepo.findById(isbn).orElse(null);
     }

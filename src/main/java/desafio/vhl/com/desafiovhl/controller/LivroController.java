@@ -2,6 +2,7 @@ package desafio.vhl.com.desafiovhl.controller;
 
 import desafio.vhl.com.desafiovhl.dto.*;
 import desafio.vhl.com.desafiovhl.model.Livro;
+import desafio.vhl.com.desafiovhl.model.Usuario;
 import desafio.vhl.com.desafiovhl.service.LivroService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -32,13 +33,22 @@ public class LivroController {
         List<LivroResponse> resp = livros.stream().map(l -> mapper.map(l, LivroResponse.class)).toList();
         return ResponseEntity.ok(resp);
     }
-    @GetMapping("/livro/{autor}")
-    public ResponseEntity<List<LivroResponse>> consultarPorNome(@PathVariable("autor") String autor) {
+    @GetMapping("/autor/{autor}")
+    public ResponseEntity<List<LivroResponse>> consultarPorAutor(@PathVariable("autor") String autor) {
         List<Livro>livros = livroService.consultarPorAutor(autor);
-        Collections.sort(livros, Comparator.comparing(Livro::getAutores)); // ordem alfabética
+        Collections.sort(livros, Comparator.comparing(Livro::getAutores));
         List<LivroResponse> resp = livros.stream().map(l -> mapper.map(l, LivroResponse.class)).toList();
         return ResponseEntity.ok(resp);
     }
+    @GetMapping("/titulo/{titulo}")
+    public ResponseEntity<List<LivroResponse>> consultarPorTitulo(@PathVariable("titulo") String titulo) {
+        List<Livro>livros = livroService.consultarPortitulo(titulo);
+        Collections.sort(livros, Comparator.comparing(Livro::getTitulo));
+        List<LivroResponse> resp = livros.stream().map(l -> mapper.map(l, LivroResponse.class)).toList();
+        return ResponseEntity.ok(resp);
+    }
+    
+    
     @PostMapping
     public ResponseEntity<LivroResponse> inserir(@RequestBody @Valid LivroRequest request) {
         Livro livro = mapper.map(request, Livro.class);
