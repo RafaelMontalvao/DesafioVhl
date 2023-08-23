@@ -64,4 +64,10 @@ public class UsuarioController {
 
         return ResponseEntity.ok(resp);
     }
+
+    @DeleteMapping("{cpf}")
+    public ResponseEntity excluir(@PathVariable Long cpf) {
+        usuarioService.excluir(cpf);
+        return ResponseEntity.noContent().build();
+    }
 }
