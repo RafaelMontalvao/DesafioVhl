@@ -1,10 +1,7 @@
 package desafio.vhl.com.desafiovhl.service;
-
-import desafio.vhl.com.desafiovhl.exception.LeitorComEmprestimosException;
 import desafio.vhl.com.desafiovhl.exception.RegistroExistenteException;
 import desafio.vhl.com.desafiovhl.exception.RegistroNaoEncontradoException;
 import desafio.vhl.com.desafiovhl.model.Livro;
-import desafio.vhl.com.desafiovhl.model.Usuario;
 import desafio.vhl.com.desafiovhl.repository.LivroRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -55,19 +52,15 @@ public class LivroService {
         }
         livroRepo.deleteById(isbn);
     }
-
-
     public void indisponibilizar(String isbn) {
         Livro livro = this.consultar(isbn);
         livro.setDisponivel(false);
         livroRepo.save(livro);
     }
-
     public void disponibilizar(String isbn) {
         Livro livro = this.consultar(isbn);
         livro.setDisponivel(true);
         livroRepo.save(livro);
     }
-
 }
 

@@ -45,7 +45,6 @@ public class EmprestimoContoller {
         return ResponseEntity.ok(resp);
     }
 
-
     @PostMapping
     public ResponseEntity<EmprestimoResponse> inserir(@RequestBody @Valid EmprestimoRequest request) {
         Emprestimo emprestimo = mapper.map(request, Emprestimo.class);
@@ -53,4 +52,10 @@ public class EmprestimoContoller {
         EmprestimoResponse resp = mapper.map(emprestimo, EmprestimoResponse.class);
         return ResponseEntity.created(URI.create(emprestimo.getId().toString())).body(resp);
     }
+    @DeleteMapping("{id}")
+    public ResponseEntity excluir(@PathVariable Integer id) {
+        emprestimoService.excluir(id);
+        return ResponseEntity.noContent().build();
+    }
+
 }
