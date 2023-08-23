@@ -4,6 +4,8 @@ package desafio.vhl.com.desafiovhl.controller;
 import desafio.vhl.com.desafiovhl.dto.EmprestimoRequest;
 import desafio.vhl.com.desafiovhl.dto.EmprestimoResponse;
 import desafio.vhl.com.desafiovhl.model.Emprestimo;
+import desafio.vhl.com.desafiovhl.model.Livro;
+import desafio.vhl.com.desafiovhl.model.Usuario;
 import desafio.vhl.com.desafiovhl.service.EmprestimoService;
 import desafio.vhl.com.desafiovhl.service.LivroService;
 import desafio.vhl.com.desafiovhl.service.UsuarioService;
@@ -15,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 
 @CrossOrigin
 @RestController
@@ -28,6 +31,19 @@ public class EmprestimoContoller {
     private final UsuarioService leitorService;
 
     private final ModelMapper mapper;
+
+    @GetMapping
+    public ResponseEntity<List<EmprestimoResponse>> consultar() {
+        List<Emprestimo> emprestimos = emprestimoService.consultar();
+        List<EmprestimoResponse> resp = emprestimos.stream().map(l -> mapper.map(l, EmprestimoResponse.class)).toList();
+        resp.forEach(r -> {
+            Livro livro = livroService.consultar(r.getIsbn());
+            Usuario usuario  = leitorService.consultar(r.getCpf());
+            r.setTitulo(livro.getTitulo());
+            r.setNome(usuario.getNome());
+        });
+        return ResponseEntity.ok(resp);
+    }
 
 
     @PostMapping

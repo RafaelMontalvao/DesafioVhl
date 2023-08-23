@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -20,7 +21,9 @@ public class EmprestimoService {
     private final UsuarioService usuarioService;
     private final EmprestimoRepository emprestimoRepo;
 
-
+    public List<Emprestimo> consultar() {
+        return emprestimoRepo.findAll();
+    }
   @Transactional
     public Emprestimo incluir(Emprestimo emprestimo) {
         Livro livro = livroService.consultar(emprestimo.getIsbn());
@@ -32,7 +35,9 @@ public class EmprestimoService {
         usuarioService.incrementarEmprestimosAtivos(emprestimo.getCpf());
         return emprestimo;
     }
-    }
+
+
+}
 
 
 
