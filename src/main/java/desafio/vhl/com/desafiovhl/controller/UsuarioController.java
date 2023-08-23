@@ -40,6 +40,8 @@ public class UsuarioController {
         return ResponseEntity.ok(resp);
     }
 
+    gi
+
     @PostMapping
     public ResponseEntity<UsuarioResponse> inserir(@RequestBody @Valid UsuarioRequest request) {
         Usuario usuario = mapper.map(request, Usuario.class);
