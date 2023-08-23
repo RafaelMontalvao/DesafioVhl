@@ -1,6 +1,8 @@
 package desafio.vhl.com.desafiovhl.service;
 
+import desafio.vhl.com.desafiovhl.exception.LeitorComEmprestimosException;
 import desafio.vhl.com.desafiovhl.exception.RegistroExistenteException;
+import desafio.vhl.com.desafiovhl.exception.RegistroNaoEncontradoException;
 import desafio.vhl.com.desafiovhl.model.Livro;
 import desafio.vhl.com.desafiovhl.model.Usuario;
 import desafio.vhl.com.desafiovhl.repository.LivroRepository;
@@ -18,6 +20,7 @@ public class LivroService {
     public List<Livro> consultar() {
         return livroRepo.findAll();
     }
+
     public Livro buscarPorIsbn(String isbn) {
         return livroRepo.findById(isbn).orElse(null);
     }
@@ -31,6 +34,14 @@ public class LivroService {
 
     public Livro editar(Livro livro) {
         return livroRepo.save(livro);
+    }
+
+    public void excluir(String isbn) {
+        Livro livro = this.buscarPorIsbn(isbn);
+        if (livro == null) {
+            throw new RegistroNaoEncontradoException();
+        }
+        livroRepo.deleteById(isbn);
     }
 }
 
