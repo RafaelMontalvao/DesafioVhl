@@ -18,11 +18,18 @@ public class LivroService {
     public List<Livro> consultar() {
         return livroRepo.findAll();
     }
+    public Livro buscarPorIsbn(String isbn) {
+        return livroRepo.findById(isbn).orElse(null);
+    }
 
     public Livro criar(Livro livro) {
         if (livroRepo.existsById(livro.getIsbn()))
             throw new RegistroExistenteException();
         livro = livroRepo.save(livro);
         return livro;
+    }
+
+    public Livro editar(Livro livro) {
+        return livroRepo.save(livro);
     }
 }

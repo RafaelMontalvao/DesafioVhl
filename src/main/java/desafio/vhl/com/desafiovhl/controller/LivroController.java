@@ -1,9 +1,6 @@
 package desafio.vhl.com.desafiovhl.controller;
 
-import desafio.vhl.com.desafiovhl.dto.LivroRequest;
-import desafio.vhl.com.desafiovhl.dto.LivroResponse;
-import desafio.vhl.com.desafiovhl.dto.UsuarioRequest;
-import desafio.vhl.com.desafiovhl.dto.UsuarioResponse;
+import desafio.vhl.com.desafiovhl.dto.*;
 import desafio.vhl.com.desafiovhl.model.Livro;
 import desafio.vhl.com.desafiovhl.model.Usuario;
 import desafio.vhl.com.desafiovhl.service.LivroService;
@@ -40,6 +37,23 @@ public class LivroController {
         livro = livroService.criar(livro);
         LivroResponse resp = mapper.map(livro, LivroResponse.class);
         return ResponseEntity.created(URI.create(livro.getIsbn().toString())).body(resp);
+    }
+
+    @PutMapping("/{isbn}")
+    public ResponseEntity<LivroResponse> atualizar(@PathVariable String isbn, @RequestBody @Valid LivroRequestEdicao request) {
+        Livro livroExistente = livroService.buscarPorIsbn(isbn);
+
+        if (livroExistente == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        mapper.map(request, livroExistente); // Atualiza os dados do usuário existente
+
+        livroExistente = livroService.editar(livroExistente); // Salva as alterações
+
+       LivroResponse resp = mapper.map(livroExistente, LivroResponse.class);
+
+        return ResponseEntity.ok(resp);
     }
 
 }
