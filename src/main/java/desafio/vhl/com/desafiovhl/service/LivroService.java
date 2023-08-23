@@ -20,6 +20,9 @@ public class LivroService {
     public List<Livro> consultar() {
         return livroRepo.findAll();
     }
+    public List<Livro> consultarPorAutor(String autor) {
+        return livroRepo.findByAutoresContainsIgnoreCase(autor);
+    }
 
     public Livro buscarPorIsbn(String isbn) {
         return livroRepo.findById(isbn).orElse(null);

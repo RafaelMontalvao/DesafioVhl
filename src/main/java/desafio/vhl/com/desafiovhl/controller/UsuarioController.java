@@ -40,7 +40,6 @@ public class UsuarioController {
         return ResponseEntity.ok(resp);
     }
 
-
     @GetMapping("{nome}")
     public ResponseEntity<List<UsuarioResponse>> consultarPorNome(@PathVariable("nome") String nome) {
         List<Usuario> usuarios = usuarioService.consultarPorNome(nome);

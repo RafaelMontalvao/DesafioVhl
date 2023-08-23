@@ -2,7 +2,6 @@ package desafio.vhl.com.desafiovhl.controller;
 
 import desafio.vhl.com.desafiovhl.dto.*;
 import desafio.vhl.com.desafiovhl.model.Livro;
-import desafio.vhl.com.desafiovhl.model.Usuario;
 import desafio.vhl.com.desafiovhl.service.LivroService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 @CrossOrigin
@@ -31,6 +32,13 @@ public class LivroController {
         List<LivroResponse> resp = livros.stream().map(l -> mapper.map(l, LivroResponse.class)).toList();
         return ResponseEntity.ok(resp);
     }
+    @GetMapping("/livro/{autor}")
+    public ResponseEntity<List<LivroResponse>> consultarPorNome(@PathVariable("autor") String autor) {
+        List<Livro>livros = livroService.consultarPorAutor(autor);
+        Collections.sort(livros, Comparator.comparing(Livro::getAutores)); // ordem alfabética
+        List<LivroResponse> resp = livros.stream().map(l -> mapper.map(l, LivroResponse.class)).toList();
+        return ResponseEntity.ok(resp);
+    }
     @PostMapping
     public ResponseEntity<LivroResponse> inserir(@RequestBody @Valid LivroRequest request) {
         Livro livro = mapper.map(request, Livro.class);
@@ -42,17 +50,12 @@ public class LivroController {
     @PutMapping("/{isbn}")
     public ResponseEntity<LivroResponse> atualizar(@PathVariable String isbn, @RequestBody @Valid LivroRequestEdicao request) {
         Livro livroExistente = livroService.buscarPorIsbn(isbn);
-
-        if (livroExistente == null) {
-            return ResponseEntity.notFound().build();
+            if (livroExistente == null) {
+                return ResponseEntity.notFound().build();
         }
-
         mapper.map(request, livroExistente); // Atualiza os dados do usuário existente
-
         livroExistente = livroService.editar(livroExistente); // Salva as alterações
-
-       LivroResponse resp = mapper.map(livroExistente, LivroResponse.class);
-
+        LivroResponse resp = mapper.map(livroExistente, LivroResponse.class);
         return ResponseEntity.ok(resp);
     }
 

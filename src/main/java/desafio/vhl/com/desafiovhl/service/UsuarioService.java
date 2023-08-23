@@ -31,8 +31,6 @@ public class UsuarioService {
         return usuarioRepo.findByNomeContaining(nome);
     }
 
-
-
     public Usuario editar(Usuario usuario) {
         return usuarioRepo.save(usuario);
 
