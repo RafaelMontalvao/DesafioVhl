@@ -20,6 +20,11 @@ public class LivroService {
     public List<Livro> consultar() {
         return livroRepo.findAll();
     }
+    public Livro consultar(String isbn) {
+        return livroRepo.findById(isbn)
+                .orElseThrow(RegistroNaoEncontradoException::new);
+    }
+
     public List<Livro> consultarPorAutor(String autor) {
         return livroRepo.findByAutoresContainsIgnoreCase(autor);
     }
@@ -50,5 +55,19 @@ public class LivroService {
         }
         livroRepo.deleteById(isbn);
     }
+
+
+    public void indisponibilizar(String isbn) {
+        Livro livro = this.consultar(isbn);
+        livro.setDisponivel(false);
+        livroRepo.save(livro);
+    }
+
+    public void disponibilizar(String isbn) {
+        Livro livro = this.consultar(isbn);
+        livro.setDisponivel(true);
+        livroRepo.save(livro);
+    }
+
 }
 

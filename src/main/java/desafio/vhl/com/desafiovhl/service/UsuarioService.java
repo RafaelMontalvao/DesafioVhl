@@ -26,6 +26,10 @@ public class UsuarioService {
     public  List<Usuario> consultar() {
         return usuarioRepo.findAll();
     }
+    public Usuario consultar(Long cpf) {
+        return usuarioRepo.findById(cpf)
+                .orElseThrow(RegistroNaoEncontradoException::new);
+    }
 
     public List<Usuario> consultarPorNome(String nome) {
         return usuarioRepo.findByNomeContaining(nome);
@@ -56,5 +60,11 @@ public class UsuarioService {
         if (possuiEmprestimosAtivos)
             throw new LeitorComEmprestimosException();
         usuarioRepo.deleteById(cpf);
+    }
+
+    public void incrementarEmprestimosAtivos(Long cpf) {
+        Usuario usuario = this.consultar(cpf);
+        usuario.setQtdEmprestimos( usuario.getQtdEmprestimos() + 1 );
+        usuarioRepo.save(usuario);
     }
 }
