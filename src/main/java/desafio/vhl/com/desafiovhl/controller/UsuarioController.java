@@ -40,8 +40,14 @@ public class UsuarioController {
         return ResponseEntity.ok(resp);
     }
 
-    gi
 
+    @GetMapping("{nome}")
+    public ResponseEntity<List<UsuarioResponse>> consultarPorNome(@PathVariable("nome") String nome) {
+        List<Usuario> usuarios = usuarioService.consultarPorNome(nome);
+        Collections.sort(usuarios, Comparator.comparing(Usuario::getNome)); // ordem alfabética
+        List<UsuarioResponse> resp = usuarios.stream().map(l -> mapper.map(l, UsuarioResponse.class)).toList();
+        return ResponseEntity.ok(resp);
+    }
     @PostMapping
     public ResponseEntity<UsuarioResponse> inserir(@RequestBody @Valid UsuarioRequest request) {
         Usuario usuario = mapper.map(request, Usuario.class);
