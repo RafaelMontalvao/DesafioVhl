@@ -18,5 +18,5 @@ public class Livro {
 
     private String autores;
 
-    private boolean disponivel;
+    private boolean disponivel ;
 }

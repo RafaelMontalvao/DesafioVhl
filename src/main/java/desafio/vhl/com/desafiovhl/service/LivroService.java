@@ -1,6 +1,8 @@
 package desafio.vhl.com.desafiovhl.service;
 
+import desafio.vhl.com.desafiovhl.exception.RegistroExistenteException;
 import desafio.vhl.com.desafiovhl.model.Livro;
+import desafio.vhl.com.desafiovhl.model.Usuario;
 import desafio.vhl.com.desafiovhl.repository.LivroRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,5 +17,12 @@ public class LivroService {
 
     public List<Livro> consultar() {
         return livroRepo.findAll();
+    }
+
+    public Livro criar(Livro livro) {
+        if (livroRepo.existsById(livro.getIsbn()))
+            throw new RegistroExistenteException();
+        livro = livroRepo.save(livro);
+        return livro;
     }
 }

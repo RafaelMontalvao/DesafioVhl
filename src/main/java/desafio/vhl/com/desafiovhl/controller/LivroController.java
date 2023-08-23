@@ -1,17 +1,20 @@
 package desafio.vhl.com.desafiovhl.controller;
 
+import desafio.vhl.com.desafiovhl.dto.LivroRequest;
 import desafio.vhl.com.desafiovhl.dto.LivroResponse;
+import desafio.vhl.com.desafiovhl.dto.UsuarioRequest;
+import desafio.vhl.com.desafiovhl.dto.UsuarioResponse;
 import desafio.vhl.com.desafiovhl.model.Livro;
+import desafio.vhl.com.desafiovhl.model.Usuario;
 import desafio.vhl.com.desafiovhl.service.LivroService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 
 @CrossOrigin
@@ -30,6 +33,13 @@ public class LivroController {
         List<Livro> livros = livroService.consultar();
         List<LivroResponse> resp = livros.stream().map(l -> mapper.map(l, LivroResponse.class)).toList();
         return ResponseEntity.ok(resp);
+    }
+    @PostMapping
+    public ResponseEntity<LivroResponse> inserir(@RequestBody @Valid LivroRequest request) {
+        Livro livro = mapper.map(request, Livro.class);
+        livro = livroService.criar(livro);
+        LivroResponse resp = mapper.map(livro, LivroResponse.class);
+        return ResponseEntity.created(URI.create(livro.getIsbn().toString())).body(resp);
     }
 
 }
