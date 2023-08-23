@@ -5,6 +5,7 @@ import desafio.vhl.com.desafiovhl.controller.UsuarioController;
 import desafio.vhl.com.desafiovhl.dto.UsuarioResponse;
 import desafio.vhl.com.desafiovhl.exception.LeitorComEmprestimosException;
 import desafio.vhl.com.desafiovhl.exception.RegistroExistenteException;
+import desafio.vhl.com.desafiovhl.exception.RegistroNaoEncontradoException;
 import desafio.vhl.com.desafiovhl.model.Usuario;
 import desafio.vhl.com.desafiovhl.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
@@ -40,6 +41,9 @@ public class UsuarioService {
 
     public void excluir(Long cpf) {
         Usuario usuario = this.buscarPorCpf(cpf);
+        if (usuario == null){
+            throw new RegistroNaoEncontradoException();
+        }
         boolean possuiEmprestimosAtivos = usuario.getQtdEmprestimos() > 0;
         if (possuiEmprestimosAtivos)
             throw new LeitorComEmprestimosException();
