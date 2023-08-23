@@ -20,6 +20,15 @@ public class UsuarioService {
     public  List<Usuario> consultar() {
         return usuarioRepo.findAll();
     }
+
+    public Usuario editar(Usuario usuario) {
+        return usuarioRepo.save(usuario);
+    }
+   public Usuario buscarPorCpf(Long cpf) {
+        return usuarioRepo.findById(cpf).orElse(null);
+    }
+
+
     public Usuario criar(Usuario usuario) {
         if (usuarioRepo.existsById(usuario.getCpf()))
             throw new RegistroExistenteException();

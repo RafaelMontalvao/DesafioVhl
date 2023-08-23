@@ -2,6 +2,7 @@ package desafio.vhl.com.desafiovhl.controller;
 
 
 import desafio.vhl.com.desafiovhl.dto.UsuarioRequest;
+import desafio.vhl.com.desafiovhl.dto.UsuarioRequestEdicao;
 import desafio.vhl.com.desafiovhl.dto.UsuarioResponse;
 import desafio.vhl.com.desafiovhl.model.Usuario;
 import desafio.vhl.com.desafiovhl.service.UsuarioService;
@@ -27,7 +28,7 @@ import java.util.List;
 public class UsuarioController {
 
     @Autowired
-    private ModelMapper mapper;
+    private  ModelMapper mapper;
 
     private final UsuarioService usuarioService;
 
@@ -47,4 +48,20 @@ public class UsuarioController {
         return ResponseEntity.created(URI.create(usuario.getCpf().toString())).body(resp);
     }
 
+    @PutMapping("/{cpf}")
+    public ResponseEntity<UsuarioResponse> atualizar(@PathVariable Long cpf, @RequestBody @Valid UsuarioRequestEdicao request) {
+        Usuario usuarioExistente = usuarioService.buscarPorCpf(cpf);
+
+        if (usuarioExistente == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        mapper.map(request, usuarioExistente); // Atualiza os dados do usuário existente
+
+        usuarioExistente = usuarioService.editar(usuarioExistente); // Salva as alterações
+
+        UsuarioResponse resp = mapper.map(usuarioExistente, UsuarioResponse.class);
+
+        return ResponseEntity.ok(resp);
+    }
 }
