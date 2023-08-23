@@ -13,11 +13,11 @@ import java.time.LocalDate;
 public class Usuario {
 
     @Id
-    private Long cep;
+    private Long cpf;
 
     private String nome;
 
     private LocalDate dataNascimento;
 
-    private int qtdemprestimos;
+    private int qtdEmprestimos;
 }
