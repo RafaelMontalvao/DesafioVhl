@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 @CrossOrigin
@@ -31,6 +33,22 @@ public class LivroController {
         List<LivroResponse> resp = livros.stream().map(l -> mapper.map(l, LivroResponse.class)).toList();
         return ResponseEntity.ok(resp);
     }
+    @GetMapping("/autor/{autor}")
+    public ResponseEntity<List<LivroResponse>> consultarPorAutor(@PathVariable("autor") String autor) {
+        List<Livro>livros = livroService.consultarPorAutor(autor);
+        Collections.sort(livros, Comparator.comparing(Livro::getAutores));
+        List<LivroResponse> resp = livros.stream().map(l -> mapper.map(l, LivroResponse.class)).toList();
+        return ResponseEntity.ok(resp);
+    }
+    @GetMapping("/titulo/{titulo}")
+    public ResponseEntity<List<LivroResponse>> consultarPorTitulo(@PathVariable("titulo") String titulo) {
+        List<Livro>livros = livroService.consultarPortitulo(titulo);
+        Collections.sort(livros, Comparator.comparing(Livro::getTitulo));
+        List<LivroResponse> resp = livros.stream().map(l -> mapper.map(l, LivroResponse.class)).toList();
+        return ResponseEntity.ok(resp);
+    }
+    
+    
     @PostMapping
     public ResponseEntity<LivroResponse> inserir(@RequestBody @Valid LivroRequest request) {
         Livro livro = mapper.map(request, Livro.class);
@@ -42,17 +60,12 @@ public class LivroController {
     @PutMapping("/{isbn}")
     public ResponseEntity<LivroResponse> atualizar(@PathVariable String isbn, @RequestBody @Valid LivroRequestEdicao request) {
         Livro livroExistente = livroService.buscarPorIsbn(isbn);
-
-        if (livroExistente == null) {
-            return ResponseEntity.notFound().build();
+            if (livroExistente == null) {
+                return ResponseEntity.notFound().build();
         }
-
         mapper.map(request, livroExistente); // Atualiza os dados do usuário existente
-
         livroExistente = livroService.editar(livroExistente); // Salva as alterações
-
-       LivroResponse resp = mapper.map(livroExistente, LivroResponse.class);
-
+        LivroResponse resp = mapper.map(livroExistente, LivroResponse.class);
         return ResponseEntity.ok(resp);
     }
 

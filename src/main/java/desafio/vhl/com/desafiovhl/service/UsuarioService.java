@@ -2,35 +2,43 @@ package desafio.vhl.com.desafiovhl.service;
 
 
 import desafio.vhl.com.desafiovhl.controller.UsuarioController;
-import desafio.vhl.com.desafiovhl.dto.UsuarioResponse;
+
 import desafio.vhl.com.desafiovhl.exception.LeitorComEmprestimosException;
 import desafio.vhl.com.desafiovhl.exception.RegistroExistenteException;
 import desafio.vhl.com.desafiovhl.exception.RegistroNaoEncontradoException;
 import desafio.vhl.com.desafiovhl.model.Usuario;
 import desafio.vhl.com.desafiovhl.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class UsuarioService {
 
-
     private final UsuarioRepository usuarioRepo;
+
+
 
     public  List<Usuario> consultar() {
         return usuarioRepo.findAll();
     }
 
+    public List<Usuario> consultarPorNome(String nome) {
+        return usuarioRepo.findByNomeContaining(nome);
+    }
+
     public Usuario editar(Usuario usuario) {
         return usuarioRepo.save(usuario);
+
     }
    public Usuario buscarPorCpf(Long cpf) {
         return usuarioRepo.findById(cpf).orElse(null);
-    }
 
+    }
 
     public Usuario criar(Usuario usuario) {
         if (usuarioRepo.existsById(usuario.getCpf()))
