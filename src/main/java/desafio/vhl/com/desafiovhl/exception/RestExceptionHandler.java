@@ -46,10 +46,15 @@ import java.util.Map;
 
         @ExceptionHandler(LeitorComEmprestimosException.class)
         public ResponseEntity<Object> handleLeitorComEmprestimosException(LeitorComEmprestimosException e) {
-            var retorno = new ErroResponse("Leitor com Empréstimos ativos não podem ser excluídos!");
+            var retorno = new ErroResponse("Usuário com Empréstimos ativos não podem ser excluídos!");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(retorno);
         }
 
+        @ExceptionHandler(LeitorComMuitosEmprestimosException.class)
+        public ResponseEntity<Object> handleLeitorComMuitosEmprestimosException(LeitorComMuitosEmprestimosException e) {
+            var retorno = new ErroResponse("Usuário não pode pegar mais livors excedeu o limite de 2!");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(retorno);
+        }
         @ExceptionHandler(ConstraintViolationException.class)
         public ResponseEntity<Object> handleConstraintViolation(ConstraintViolationException ex) {
             Map<String, String> fieldErrors = new HashMap<>();
