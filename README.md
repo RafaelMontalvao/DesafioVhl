@@ -131,7 +131,7 @@ Deve retornar os dados atualizados de todos os livros.
 Rota responsável pela consulta de todos os livros cadastrados por autor.
 Deve retornar os dados atualizados de todos os livros cadastrados por autor.
 
-**HTTP GET** → http://localhost:8080/livros/{autor}
+**HTTP GET** → http://localhost:8080/livros/autor/{autor}
 
 **EX:. Rota:** http://localhost:8080/livros/autor/isaac
 
@@ -148,7 +148,7 @@ Rota responsável pela consulta de todos os livros cadastrados por Titulo.
 
 Deve retornar os dados atualizados de todos os livros cadastrados por Titulo.
 
-**HTTP GET** → http://localhost:8080/livros/{titulo}
+**HTTP GET** → http://localhost:8080/livros/titulo/{titulo}
 
 **EX:. Rota:** http://localhost:8080/livros/titulo/Guia
 
